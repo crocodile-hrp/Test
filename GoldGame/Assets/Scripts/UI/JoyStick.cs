@@ -17,22 +17,19 @@ public class JoyStick : Singleton<JoyStick>,IBeginDragHandler,IDragHandler,IEndD
     public Vector2 startPos;
     public Vector2 movePos;
     //public static event Action OnJump;
-    public int plantDir=1;
-    public Text plantDirText;
 
     Image Bg;
 
     protected override void Awake()
     {
         base.Awake();
-        plantDir = 1;
         Bg = GetComponent<Image>();
         ResetJoy();
     }
 
     private void OnDisable()
     {
-        ResetJoy();
+        //ResetJoy();
     }
 
     private void Update()
@@ -84,6 +81,6 @@ public class JoyStick : Singleton<JoyStick>,IBeginDragHandler,IDragHandler,IEndD
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        ResetJoy();
+        //ResetJoy();
     }
 }

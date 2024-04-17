@@ -22,10 +22,17 @@ public class Enemy : MonoBehaviour
     private void OnEnable()
     {
         GameManager.GameOver += InitBoss;
+        GameManager.BossDead += InitBoss;
     }
 
     void InitBoss()
     {
+        if(GameManager.Instance.killBossCount<=3)
+            maxHp = Random.Range(15, 20);
+        else if(GameManager.Instance.killBossCount <= 10)
+            maxHp = Random.Range(25, 50);
+        else
+            maxHp = Random.Range(100, 150);
         currentHp = maxHp;
         bossHp.fillAmount = currentHp / maxHp;
         hitMask.color = new Color(hitMask.color.r, hitMask.color.g, hitMask.color.b, 0);
@@ -35,11 +42,13 @@ public class Enemy : MonoBehaviour
     private void OnDisable()
     {
         GameManager.GameOver -= InitBoss;
-        InitBoss();
+        GameManager.BossDead -= InitBoss;
     }
     private void OnDestroy()
     {
         GameManager.GameOver -= InitBoss;
+        GameManager.BossDead -= InitBoss;
+
     }
 
     public void OnHit(float damage)
@@ -51,6 +60,7 @@ public class Enemy : MonoBehaviour
         if(currentHp <= 0)
         {
             GameManager.Instance.AddKillBoss();
+            UIManager.Instance.bossHpHold.SetActive(false);
             PoolManager.Instance.ReleaseObj(gameObject);
         }
     }

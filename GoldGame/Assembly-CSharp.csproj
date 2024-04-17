@@ -70,8 +70,10 @@
     <Compile Include="Assets\Scripts\Manager\GameManager.cs" />
     <Compile Include="Assets\Scripts\StartGame.cs" />
     <Compile Include="Assets\Scripts\Tool\Singleton.cs" />
+    <Compile Include="Assets\Scripts\Game\UpgradeCard.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Texture2D\UIResourece\Character\INSPIRE US.txt" />
     <None Include="Assets\Texture2D\flappybird\font_all-export.fnt" />
     <None Include="Assets\Texture2D\flappybird\atlas.txt" />
   </ItemGroup>

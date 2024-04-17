@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class ItemManager : Singleton<ItemManager>
 {
-    public float createTime = 0;
-    public float createLiftItemTime = 5;
+    [Tooltip("创建基本道具间隔")] public float createTime = 0;
+    [Tooltip("创建生命道具间隔")]public float createLifeItemTime = 5;
+    [Tooltip("创建护盾道具间隔")] public float createShieldTime = 20;
     public GameObject[] ItemPrefabs;
+    [Tooltip("护盾道具")] public GameObject shieldItem;
     [Header("冲过来的敌人")] public GameObject atkEnemy;//待做
     public bool islandScape;
     protected override void Awake()
@@ -22,16 +24,30 @@ public class ItemManager : Singleton<ItemManager>
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.Instance.isGameOver)
+        if (GameManager.Instance.isGameOver || GameManager.Instance.bossIsDead)
             return;
         createPrefab();
     }
 
+    /// <summary>
+    /// 生成预制体
+    /// </summary>
     void createPrefab()
     {
+        CreateBaseItem();
+        CreateAddLiftPrefab();
+        CreateShieldItem();
+
+    }
+
+    /// <summary>
+    /// 生成基础物品 金币、盗贼、炸弹
+    /// </summary>
+    void CreateBaseItem()
+    {
         createTime -= Time.deltaTime;
- 
-        if(createTime <= 0)
+
+        if (createTime <= 0)
         {
             float random = Random.Range(0, 1.1f);
             int prefabIndex;
@@ -50,21 +66,39 @@ public class ItemManager : Singleton<ItemManager>
             else
                 createTime = Random.Range(0, 0.5f);
         }
-        CreateAddLiftPrefab();
-
     }
 
+    /// <summary>
+    /// 生成生命道具
+    /// </summary>
     void CreateAddLiftPrefab()
     {
-        if (GameManager.Instance.lift < 3)
+        if (GameManager.Instance.life < GameManager.Instance.maxlife)
         {
-            createLiftItemTime -= Time.deltaTime;
-            if (createLiftItemTime <= 0)
+            createLifeItemTime -= Time.deltaTime;
+            if (createLifeItemTime <= 0)
             {
                 GameObject prefab = PoolManager.Instance.GetObj(ItemPrefabs[3]);
                 prefab.transform.position = RandomCreatPos();
-                createLiftItemTime = Random.Range(10, 45f);
+                createLifeItemTime = Random.Range(10, 45f);
             }
+        }
+    }
+
+    /// <summary>
+    /// 生成护盾道具 （后期各种道具可以一起套用 到时间生成随机一个道具？）
+    /// </summary>
+    void CreateShieldItem()
+    {
+        createShieldTime -= Time.deltaTime;
+        if (createShieldTime <= 0)
+        {
+            GameObject prefab = PoolManager.Instance.GetObj(shieldItem);
+            prefab.transform.position = RandomCreatPos();
+            if(GameManager.Instance.gameTime <=60f)
+                createShieldTime = Random.Range(10, 30f);
+            else
+                createShieldTime = Random.Range(10, 20f);
         }
     }
 

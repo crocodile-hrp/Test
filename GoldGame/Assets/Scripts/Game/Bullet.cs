@@ -10,6 +10,8 @@ public class Bullet : MonoBehaviour
     [SerializeField] ItemType ItemType = ItemType.AddMoney;
     [Tooltip("刚体2d")] Rigidbody2D rb;
     [Tooltip("2d碰撞体")] Collider2D collider;
+    [Header("子弹精灵图")] public Sprite[] bulletSprites;
+    [Header("子弹Icon")] public SpriteRenderer bulletIcons;
     [Header("生成后续物品")]
     [SerializeField] GameObject prefab;
 
@@ -21,18 +23,21 @@ public class Bullet : MonoBehaviour
 
     private void OnEnable()
     {
+        bulletIcons.sprite = bulletSprites[GameManager.Instance.player.atk - 1];
         GameManager.GameOver += ReleaseObj;
-
+        GameManager.BossDead += ReleaseObj;
     }
 
     private void OnDisable()
     {
         GameManager.GameOver -= ReleaseObj;
+        GameManager.BossDead -= ReleaseObj;
     }
 
     private void OnDestroy()
     {
         GameManager.GameOver -= ReleaseObj;
+        GameManager.BossDead -= ReleaseObj;
     }
 
     private void FixedUpdate()
@@ -52,7 +57,7 @@ public class Bullet : MonoBehaviour
     {
         if (collision.CompareTag("Boss"))
         {
-            collision.GetComponent<Enemy>().OnHit(1);
+            collision.GetComponent<Enemy>().OnHit(GameManager.Instance.player.atk);
             PoolManager.Instance.ReleaseObj(gameObject);
         }
         if (collision.CompareTag("Line"))

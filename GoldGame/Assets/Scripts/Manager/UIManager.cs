@@ -4,13 +4,19 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour
+public class UIManager : Singleton<UIManager>
 {
     public Text hpText;
     public Text moneyText;
     public Text scoreText;
     public GameObject bossHpHold;
     public GameObject endPlane;
+    public GameObject UpgradeCard;
+
+    protected void Awake()
+    {
+        base.Awake();
+    }
 
     private void Start()
     {
@@ -20,27 +26,30 @@ public class UIManager : MonoBehaviour
     private void OnEnable()
     {
         GameManager.GameOver += ShowEndUI;
+        GameManager.BossDead += ShowUpgradeCard;
     }
 
     private void OnDisable()
     {
         GameManager.GameOver -= ShowEndUI;
+        GameManager.BossDead -= ShowUpgradeCard;
     }
 
     private void OnDestroy()
     {
         GameManager.GameOver -= ShowEndUI;
+        GameManager.BossDead -= ShowUpgradeCard;
     }
     private void InitUI()
     {
-        hpText.text = "✖" + GameManager.Instance.lift;
+        hpText.text = "✖" + GameManager.Instance.life;
         moneyText.text = "✖" + GameManager.Instance.money;
         bossHpHold.SetActive(true);
     }
 
     private void Update()
     {
-        hpText.text = "✖" + GameManager.Instance.lift;
+        hpText.text = "✖" + GameManager.Instance.life;
         moneyText.text = "✖" + GameManager.Instance.money;
     }
 
@@ -48,7 +57,12 @@ public class UIManager : MonoBehaviour
     {
         bossHpHold.SetActive(false);
         endPlane.SetActive(true);
-        scoreText.text = "击中Boss："+GameManager.Instance.hitBossCount+" 次，"+"击败Boss：" + GameManager.Instance.killBossCount +" 个";
+        scoreText.text = "生存时间："+GameManager.Instance.gameTime+" 秒，"+"击败Boss：" + GameManager.Instance.killBossCount +" 个";
+    }
+
+    public void ShowUpgradeCard()
+    {
+        UpgradeCard.SetActive(true);
     }
 
     public void OnContinueBtn()
