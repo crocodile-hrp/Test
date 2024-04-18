@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +7,24 @@ public class ItemManager : Singleton<ItemManager>
     [Tooltip("创建基本道具间隔")] public float createTime = 0;
     [Tooltip("创建生命道具间隔")]public float createLifeItemTime = 5;
     [Tooltip("创建护盾道具间隔")] public float createShieldTime = 20;
+
+    /// <summary>
+    /// 最大时间间隔
+    /// </summary>
+    [Header("最大时间间隔")] public float maxInterval = 1.2f;
+    /// <summary>
+    /// 最小时间间隔
+    /// </summary>
+    [Header("最小时间间隔")] public float minInterval = 0.2f;
+    /// <summary>
+    /// 时间间隔随机范围
+    /// </summary>
+    [Header("时间间隔随机范围")] public float randomRange = 0.1f;
+    /// <summary>
+    /// 到最小时间间隔所需时间
+    /// </summary>
+    [Header("到最小时间间隔所需时间")] public float maxToMinTime = 30f;
+
     public GameObject[] ItemPrefabs;
     [Tooltip("护盾道具")] public GameObject shieldItem;
     [Header("冲过来的敌人")] public GameObject atkEnemy;//待做
@@ -57,14 +75,25 @@ public class ItemManager : Singleton<ItemManager>
                 prefabIndex = 1;
             else
                 prefabIndex = 2;
+
             GameObject prefab = PoolManager.Instance.GetObj(ItemPrefabs[prefabIndex]);
             prefab.transform.position = RandomCreatPos();
-            if (GameManager.Instance.gameTime <= 20)
-                createTime = Random.Range(0.5f, 1.1f);
-            else if (GameManager.Instance.gameTime <= 60)
-                createTime = Random.Range(0.2f, 1f);
+            //if (GameManager.Instance.gameTime <= 20)
+            //    createTime = Random.Range(0.5f, 1.1f);
+            //else if (GameManager.Instance.gameTime <= 60)
+            //    createTime = Random.Range(0.2f, 1f);
+            //else
+            //    createTime = Random.Range(0, 0.5f);
+
+            //新
+            if(GameManager.Instance.gameTime <= maxToMinTime)
+            {
+                createTime = Mathf.Lerp(maxInterval, minInterval, Mathf.Clamp01(GameManager.Instance.gameTime / maxToMinTime)) + Random.Range(-randomRange, randomRange);
+            }
             else
-                createTime = Random.Range(0, 0.5f);
+            {
+                createTime = minInterval + Random.Range(-randomRange, randomRange);
+            }
         }
     }
 

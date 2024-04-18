@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,6 +21,13 @@ public class Item : MonoBehaviour
     [Header("生成后续物品")]
     [SerializeField] GameObject prefab;
 
+    [Header("---物品掉落速度详细属性---")]
+    //物品掉落速度详细属性
+    [Header("到最大速度所需时间")] public float minToMaxTime = 30;
+    [Header("最大速度")] public float maxSpeed = 6f;
+    [Header("最小速度")] public float minSpeed = 1f;
+    [Header("随机范围")] public float randomRange = 1f;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -39,20 +46,13 @@ public class Item : MonoBehaviour
         //    fallSpeed = Random.Range(-6, -1.2f);
 
         //新
-        if (GameManager.Instance.gameTime <= 30)
+        if(GameManager.Instance.gameTime <= minToMaxTime)
         {
-            if (GameManager.Instance.gameTime <= 5)
-            {
-                fallSpeed = Random.Range(-1.2f, -1f);
-            }
-            else
-            {
-                fallSpeed = Random.Range(-(GameManager.Instance.gameTime / 5 + 0.1f), -1f);
-            }
+            fallSpeed = Mathf.Lerp(-minSpeed, -maxSpeed, Mathf.Clamp01(GameManager.Instance.gameTime / minToMaxTime)) + Random.Range(-randomRange, randomRange);
         }
         else
         {
-            fallSpeed = Random.Range(-6, -1.2f);
+            fallSpeed = -maxSpeed + Random.Range(-randomRange, randomRange);
         }
 
     }
@@ -67,21 +67,16 @@ public class Item : MonoBehaviour
         //    fallSpeed = Random.Range(-6, -1.2f);
 
         //新
-        if (GameManager.Instance.gameTime <= 30)
+
+        if (GameManager.Instance.gameTime <= minToMaxTime)
         {
-            if (GameManager.Instance.gameTime <= 5)
-            {
-                fallSpeed = Random.Range(-1.2f, -1f);
-            }
-            else
-            {
-                fallSpeed = Random.Range(-(GameManager.Instance.gameTime / 5 + 0.1f), -1f);
-            }
+            fallSpeed = Mathf.Lerp(-minSpeed, -maxSpeed, Mathf.Clamp01(GameManager.Instance.gameTime / minToMaxTime)) + Random.Range(-randomRange, randomRange);
         }
         else
         {
-            fallSpeed = Random.Range(-6, -1.2f);
+            fallSpeed = -maxSpeed + Random.Range(-randomRange, randomRange);
         }
+
         GameManager.GameOver -= ReleaseObj;
         GameManager.BossDead -= ReleaseObj;
     }
