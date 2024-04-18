@@ -67,11 +67,12 @@ public class ItemManager : Singleton<ItemManager>
 
         if (createTime <= 0)
         {
-            float random = Random.Range(0, 1.1f);
+            //float random = Random.Range(0, 1.1f);
+            float random = Random.value;
             int prefabIndex;
-            if (random > 0.6f)
+            if (random >= 0.5f)
                 prefabIndex = 0;
-            else if (random > 0.2f)
+            else if (random >= 0.2f)
                 prefabIndex = 1;
             else
                 prefabIndex = 2;

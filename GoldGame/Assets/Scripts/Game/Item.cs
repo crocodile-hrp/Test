@@ -25,7 +25,7 @@ public class Item : MonoBehaviour
     //物品掉落速度详细属性
     [Header("到最大速度所需时间")] public float minToMaxTime = 30;
     [Header("最大速度")] public float maxSpeed = 6f;
-    [Header("最小速度")] public float minSpeed = 1f;
+    [Header("最小速度")] public float minSpeed = 1.2f;
     [Header("随机范围")] public float randomRange = 1f;
 
     private void Awake()
@@ -46,15 +46,30 @@ public class Item : MonoBehaviour
         //    fallSpeed = Random.Range(-6, -1.2f);
 
         //新
-        if(GameManager.Instance.gameTime <= minToMaxTime)
+        if(GameManager.Instance.killBossCount >= 2)//两只boss后发力
         {
-            fallSpeed = Mathf.Lerp(-minSpeed, -maxSpeed, Mathf.Clamp01(GameManager.Instance.gameTime / minToMaxTime)) + Random.Range(-randomRange, randomRange);
+            if (GameManager.Instance.gameTime <= minToMaxTime)
+            {
+                fallSpeed = Mathf.Lerp(-minSpeed, -maxSpeed, Mathf.Clamp01(GameManager.Instance.gameTime / minToMaxTime)) + Random.Range(-randomRange, randomRange);
+            }
+            else
+            {
+                fallSpeed = -maxSpeed + Random.Range(-randomRange, randomRange);
+            }
         }
         else
         {
-            fallSpeed = -maxSpeed + Random.Range(-randomRange, randomRange);
+            if (GameManager.Instance.gameTime <= minToMaxTime)
+            {
+                fallSpeed = Mathf.Lerp(-minSpeed, -maxSpeed*0.5f, Mathf.Clamp01(GameManager.Instance.gameTime / minToMaxTime)) + Random.Range(-randomRange, randomRange);
+            }
+            else
+            {
+                fallSpeed = -maxSpeed* 0.5f + Random.Range(-randomRange, randomRange);
+            }
         }
 
+   
     }
 
     private void OnDisable()
@@ -66,15 +81,29 @@ public class Item : MonoBehaviour
         //else
         //    fallSpeed = Random.Range(-6, -1.2f);
 
+        if (GameManager.Instance == null) return;
         //新
-
-        if (GameManager.Instance.gameTime <= minToMaxTime)
+        if (GameManager.Instance.killBossCount >= 2)//两只boss后发力
         {
-            fallSpeed = Mathf.Lerp(-minSpeed, -maxSpeed, Mathf.Clamp01(GameManager.Instance.gameTime / minToMaxTime)) + Random.Range(-randomRange, randomRange);
+            if (GameManager.Instance.gameTime <= minToMaxTime)
+            {
+                fallSpeed = Mathf.Lerp(-minSpeed, -maxSpeed, Mathf.Clamp01(GameManager.Instance.gameTime / minToMaxTime)) + Random.Range(-randomRange, randomRange);
+            }
+            else
+            {
+                fallSpeed = -maxSpeed + Random.Range(-randomRange, randomRange);
+            }
         }
         else
         {
-            fallSpeed = -maxSpeed + Random.Range(-randomRange, randomRange);
+            if (GameManager.Instance.gameTime <= minToMaxTime)
+            {
+                fallSpeed = Mathf.Lerp(-minSpeed, -maxSpeed * 0.5f, Mathf.Clamp01(GameManager.Instance.gameTime / minToMaxTime)) + Random.Range(-randomRange, randomRange);
+            }
+            else
+            {
+                fallSpeed = -maxSpeed * 0.5f + Random.Range(-randomRange, randomRange);
+            }
         }
 
         GameManager.GameOver -= ReleaseObj;
@@ -134,7 +163,7 @@ public class Item : MonoBehaviour
                         if(GameManager.Instance.gameTime <= 30)
                             GameManager.Instance.SetMoney(Random.Range(-10, -5));
                         else
-                            GameManager.Instance.SetMoney(Random.Range(-15*GameManager.Instance.moneyRatio, -5));
+                            GameManager.Instance.SetMoney(Random.Range(-20, -5));
                     }
                     break;
                 case ItemType.Bomb:

@@ -59,6 +59,7 @@
     <Compile Include="Assets\Scripts\Manager\PoolManager.cs" />
     <Compile Include="Assets\Scripts\UI\AnimEvent.cs" />
     <Compile Include="Assets\Scripts\Game\ItemManager.cs" />
+    <Compile Include="Assets\Scripts\Game\UpgradeCard.cs" />
     <Compile Include="Assets\Scripts\UI\ExplodePrefab.cs" />
     <Compile Include="Assets\Scripts\UI\JoyStick.cs" />
     <Compile Include="Assets\Scripts\Game\Bullet.cs" />
@@ -70,7 +71,6 @@
     <Compile Include="Assets\Scripts\Manager\GameManager.cs" />
     <Compile Include="Assets\Scripts\StartGame.cs" />
     <Compile Include="Assets\Scripts\Tool\Singleton.cs" />
-    <Compile Include="Assets\Scripts\Game\UpgradeCard.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Texture2D\UIResourece\Character\INSPIRE US.txt" />

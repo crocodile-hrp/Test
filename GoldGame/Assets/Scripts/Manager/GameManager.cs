@@ -37,11 +37,6 @@ public class GameManager : Singleton<GameManager>
             isGameOver = true;
             GameOver?.Invoke();
         }
-        //if (bossIsDead)
-        //{
-        //    bossIsDead = false;
-        //    Invoke("CreateBoss", 2f);
-        //}
         if(!bossIsDead)
             gameTime += Time.deltaTime;
     }
@@ -51,9 +46,17 @@ public class GameManager : Singleton<GameManager>
         InitValue();
     }
 
-    public void SetMoney(int value)
+    /// <summary>
+    /// 设置金币
+    /// </summary>
+    /// <param name="value">值</param>
+    /// <param name="haveRatio">是否有倍率影响（默认true）</param>
+    public void SetMoney(int value,bool haveRatio = true)
     {
-        money += value*moneyRatio;
+        if (haveRatio)
+            money += value * moneyRatio;
+        else
+            money += value;
     }
 
     public void SetLift(int value)
@@ -67,7 +70,7 @@ public class GameManager : Singleton<GameManager>
         life = maxlife;
         money = 0;
         moneyRatio = 1;
-        player.shieldTime = 3;
+        player.shieldTime = 4;
         player.atk = 1;
         player.atkCd = 2;
         gameTime = 0;

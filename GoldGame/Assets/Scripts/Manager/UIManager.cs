@@ -57,7 +57,28 @@ public class UIManager : Singleton<UIManager>
     {
         bossHpHold.SetActive(false);
         endPlane.SetActive(true);
-        scoreText.text = "生存时间："+GameManager.Instance.gameTime+" 秒，"+"击败Boss：" + GameManager.Instance.killBossCount +" 个";
+        float min = 0;
+        float sec = 0;
+        float hour = GameManager.Instance.gameTime / 3600;
+        if (hour > 0)
+        {
+            min = GameManager.Instance.gameTime % 3600 / 60;
+            if (min > 0)
+                sec = GameManager.Instance.gameTime % 3600 % 60;
+            else
+                sec = GameManager.Instance.gameTime % 3600;
+        }
+        else
+        {
+            min = GameManager.Instance.gameTime / 60;
+            if (min > 0)
+                sec = GameManager.Instance.gameTime % 60;
+            else
+                sec = GameManager.Instance.gameTime;
+
+        }
+            scoreText.text = "生存时间：" + hour.ToString("00")+":" + min.ToString("00")+ ":" + sec.ToString("00")
+                 + " ，" + "击败Boss：" + GameManager.Instance.killBossCount + " 个";
     }
 
     public void ShowUpgradeCard()

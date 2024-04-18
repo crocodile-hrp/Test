@@ -32,7 +32,7 @@ public class Player : MonoBehaviour
     [Tooltip("刚体2d")] Rigidbody2D rb;
     [Tooltip("2d碰撞体")] Collider2D collider;
     [Tooltip("是否落地")] [SerializeField] bool isOnLand;
-    [Tooltip("护盾时间")]public float shieldTime = 3;
+    [Tooltip("护盾时间")]public float shieldTime = 4;
     [Tooltip("护盾状态")] public bool isShield;
 
 
@@ -65,7 +65,7 @@ public class Player : MonoBehaviour
             {
                 PoolManager.Instance.GetObj(bulletPrefabs).transform.position = transform.position+new Vector3(0,1);
                 currentAtkCd = atkCd;
-                GameManager.Instance.SetMoney(-10);
+                GameManager.Instance.SetMoney(-10,false);
             }
             else
             {
