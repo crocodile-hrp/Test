@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -134,7 +134,7 @@ public class Player : MonoBehaviour
         {
             moveDir = 0;
         }
-        if (JoyStick.Instance.movePos.y > 0.4f && isOnLand)
+        if (JoyStick.Instance.movePos.y > 0.8f && isOnLand)
         {
             PlayerJump();
         }

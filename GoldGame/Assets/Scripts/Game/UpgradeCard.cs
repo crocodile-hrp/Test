@@ -14,10 +14,10 @@ public enum CardType
 }
 public class UpgradeCard : MonoBehaviour
 {
-    [Header("ÃèÊöÎÄ±¾")]public Text Info;
-    [Header("·ÅÆú°´Å¥")] public GameObject noBtn;
+    [Header("æè¿°æ–‡æœ¬")]public Text Info;
+    [Header("æ”¾å¼ƒæŒ‰é’®")] public GameObject noBtn;
     public CardType cardType;
-    [Header("Ë¢ĞÂ»¨·ÑÎÄ±¾")]public Text costText;
+    [Header("åˆ·æ–°èŠ±è´¹æ–‡æœ¬")]public Text costText;
     public int flushCount = 1;
 
     private void OnEnable()
@@ -42,30 +42,30 @@ public class UpgradeCard : MonoBehaviour
         {
             case 0:
                 cardType = CardType.Life;
-                Info.text = "ÉúÃüÉÏÏŞ+1(ÓĞ·â¶¥)";
+                Info.text = "ç”Ÿå‘½ä¸Šé™+1(æœ‰å°é¡¶)";
                 break;
             case 1:
                 cardType = CardType.Atk;
-                Info.text = "¹¥»÷Á¦ÉÏÉı1(ÓĞ·â¶¥)";
+                Info.text = "æ”»å‡»åŠ›ä¸Šå‡1(æœ‰å°é¡¶)";
                 break;
             case 2:
                 cardType = CardType.AtkCd;
-                Info.text = "¹¥»÷¼ä¸ô¼õÉÙ°Ù·ÖÖ®Ê®(ÓĞ·â¶¥)";
+                Info.text = "æ”»å‡»é—´éš”å‡å°‘ç™¾åˆ†ä¹‹å(æœ‰å°é¡¶)";
                 break;
             case 3:
                 cardType = CardType.Move;
-                Info.text = "ÒÆ¶¯ËÙ¶ÈÔö¼Ó°Ù·ÖÖ®Ê®(ÓĞ·â¶¥)";
+                Info.text = "ç§»åŠ¨é€Ÿåº¦å¢åŠ ç™¾åˆ†ä¹‹å(æœ‰å°é¡¶)";
                 break;
             case 4:
                 cardType = CardType.Money;
-                Info.text = "½ğ±Ò»ñÈ¡±¶ÂÊ+1";
+                Info.text = "é‡‘å¸è·å–å€ç‡+1";
                 break;
             case 5:
                 cardType = CardType.ShieldTime;
-                Info.text = "»¤¶ÜÊ±¼ä+1";
+                Info.text = "æŠ¤ç›¾æ—¶é—´+1";
                 break;
         }
-        costText.text = (10 * flushCount) + "½ğ±ÒË¢ĞÂ´ÊÌõ";
+        costText.text = (10 * flushCount) + "é‡‘å¸åˆ·æ–°è¯æ¡";
     }
 
     public void OnYes()
@@ -74,7 +74,10 @@ public class UpgradeCard : MonoBehaviour
         {
             case CardType.Life:
                 if(GameManager.Instance.maxlife< 10)
+                {
                     GameManager.Instance.maxlife += 1;
+                    GameManager.Instance.life = GameManager.Instance.maxlife;
+                }
                 break;
             case CardType.Atk:
                 if (GameManager.Instance.player.atk < 10)
@@ -96,7 +99,7 @@ public class UpgradeCard : MonoBehaviour
                     GameManager.Instance.player.shieldTime += 1;
                 break;
         }
-        GameManager.Instance.life = GameManager.Instance.maxlife;
+        //GameManager.Instance.life = GameManager.Instance.maxlife;
         GameManager.Instance.bossIsDead = false;
         GameManager.Instance.CreateBoss();
         gameObject.SetActive(false);
