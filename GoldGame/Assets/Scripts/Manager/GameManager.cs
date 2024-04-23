@@ -20,7 +20,8 @@ public class GameManager : Singleton<GameManager>
     public float gameTime;
     public bool isGameOver;
     public bool bossIsDead;
-    public float firstInitBossTime = 30f;
+    [Tooltip("是否为第一只生成的boss")]public bool isFirstBoss = true;//是否为第一只生成的boss
+    public float firstInitBossTime = 20f;
 
     protected override void Awake()
     {
@@ -79,6 +80,7 @@ public class GameManager : Singleton<GameManager>
         killBossCount = 0;
         isGameOver = false;
         //Invoke("CreateBoss", 5f);
+        isFirstBoss = true;
         CreateBoss();
     }
 
@@ -94,17 +96,14 @@ public class GameManager : Singleton<GameManager>
         killBossCount += 1;
     }
 
-    bool isFirstBoss;
-
     /// <summary>
     /// 生成boss
     /// </summary>
     public void CreateBoss()
     {
-        if (!isFirstBoss)
+        if (isFirstBoss)
         {
             Invoke("BossPrefabsCreate", firstInitBossTime);
-            isFirstBoss = true;
             //BossPrefabsCreate();
         }
         else
@@ -119,10 +118,11 @@ public class GameManager : Singleton<GameManager>
     void BossPrefabsCreate()
     {
         bossIsDead = false;
-        GameObject bossObj = PoolManager.Instance.GetObj(bossPrefab);
+        isFirstBoss = false;
         UIManager.Instance.bossHpHold.SetActive(true);
+        GameObject bossObj = PoolManager.Instance.GetObj(bossPrefab);
         //boss出场小位移
-        bossObj.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height - 50, 100));
+        bossObj.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height - 150, 100));
         //bossObj.transform.DOMove(Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height + 50, 100)), 2f);
     }
 

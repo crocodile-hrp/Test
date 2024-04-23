@@ -182,7 +182,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 385b4b983e8406c408661b98bddbc8aa, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9b55de5081595c0418c1b1c03287e0cd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -226,6 +226,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vaildWidth: 5.6
+  bg: {fileID: 20765771}
+  bgs:
+  - {fileID: 21300000, guid: 9b55de5081595c0418c1b1c03287e0cd, type: 3}
+  - {fileID: 21300000, guid: 893bdc2f1d7cbce49813f529b63717ca, type: 3}
+  - {fileID: 21300000, guid: 385b4b983e8406c408661b98bddbc8aa, type: 3}
 --- !u!1 &28425209
 GameObject:
   m_ObjectHideFlags: 0
@@ -638,7 +643,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &300007070
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4176,6 +4181,8 @@ MonoBehaviour:
   gameTime: 0
   isGameOver: 0
   bossIsDead: 0
+  isFirstBoss: 1
+  firstInitBossTime: 20
 --- !u!1 &2111890270
 GameObject:
   m_ObjectHideFlags: 0

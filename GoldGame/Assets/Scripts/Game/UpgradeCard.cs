@@ -20,6 +20,7 @@ public class UpgradeCard : MonoBehaviour
     [Header("刷新花费文本")]public Text costText;
     public int flushCount = 1;
 
+
     private void OnEnable()
     {
         flushCount = 1;

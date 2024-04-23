@@ -48,7 +48,8 @@ public class Player : MonoBehaviour
             return;
         LandCheck();
         PlayerInput();
-        PlayerAtk();
+        if(!GameManager.Instance.isFirstBoss)
+            PlayerAtk();
     }
 
     private void FixedUpdate()

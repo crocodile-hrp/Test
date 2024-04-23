@@ -44,7 +44,7 @@ public class UIManager : Singleton<UIManager>
     {
         hpText.text = "✖" + GameManager.Instance.life;
         moneyText.text = "✖" + GameManager.Instance.money;
-        bossHpHold.SetActive(true);
+        //bossHpHold.SetActive(true);
     }
 
     private void Update()
@@ -91,6 +91,11 @@ public class UIManager : Singleton<UIManager>
         InitUI();
         endPlane.SetActive(false);
         GameManager.Instance.StartGame();
+    }
+
+    public void ShowBossHpUI()
+    {
+        bossHpHold.SetActive(true);
     }
 
 }

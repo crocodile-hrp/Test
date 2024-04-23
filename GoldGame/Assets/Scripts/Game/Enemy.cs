@@ -10,7 +10,9 @@ public class Enemy : MonoBehaviour
     public float currentHp;
     public SpriteRenderer hitMask;
     public Image bossHp;
-
+    [Header("boss精灵")] public SpriteRenderer BossSprite;
+    [Header("boss受伤精灵")] public SpriteRenderer BossHitSprite;
+    [Header("boss精灵图片数组")]public Sprite[] bossIcons;
     /// <summary>
     /// Boss初始移动距离
     /// </summary>
@@ -20,10 +22,6 @@ public class Enemy : MonoBehaviour
     /// </summary>
     public float toMaxSpeedKillcount = 3;
 
-    private void Awake()
-    {
-        bossHp = GameObject.Find("BossHp").GetComponent<Image>();
-    }
     private void Start()
     {
         InitBoss();
@@ -31,6 +29,7 @@ public class Enemy : MonoBehaviour
 
     private void OnEnable()
     {
+        bossHp = GameObject.Find("BossHp").GetComponent<Image>();
         GameManager.GameOver += InitBoss;
         GameManager.BossDead += InitBoss;
         GameManager.GameOver += ReleaseObj;
@@ -50,6 +49,10 @@ public class Enemy : MonoBehaviour
             maxHp = Random.Range(25, 50);
         else
             maxHp = Random.Range(100, 150);
+        //boss随机精灵图
+        int randomIcon = Random.Range(0, bossIcons.Length);
+        BossSprite.sprite = bossIcons[randomIcon];
+        BossHitSprite.sprite = bossIcons[randomIcon];
         currentHp = maxHp;
         bossHp.fillAmount = currentHp / maxHp;
         hitMask.color = new Color(hitMask.color.r, hitMask.color.g, hitMask.color.b, 0);
@@ -86,8 +89,10 @@ public class Enemy : MonoBehaviour
     IEnumerator BossHitAnim()
     {
         hitMask.color = new Color(hitMask.color.r, hitMask.color.g, hitMask.color.b, 1);
+        transform.DOScale(2.3f, 0.5f);
         yield return new WaitForSeconds(0.5f);
         hitMask.color = new Color(hitMask.color.r, hitMask.color.g, hitMask.color.b, 0);
+        transform.DOScale(2f, 0.2f);
         yield break;
     }
     public void ReleaseObj()
@@ -100,7 +105,7 @@ public class Enemy : MonoBehaviour
     /// </summary>
     void BossInitMove()
     {
-        transform.DOMove(Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height + 50, 100)), 2f).OnComplete(() => BossRandomMove());
+        transform.DOMove(Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height, 100)), 2f).OnComplete(() => BossRandomMove());
     }
 
     /// <summary>
@@ -113,7 +118,9 @@ public class Enemy : MonoBehaviour
 
         range = Mathf.Lerp(initRange, Screen.width / 2, Mathf.Clamp01(GameManager.Instance.killBossCount / toMaxSpeedKillcount));
         num = Random.Range(Screen.width / 2 - range, Screen.width / 2 + range);
-        transform.DOMove(Camera.main.ScreenToWorldPoint(new Vector3(num, Screen.height + 50, 100)), 2f).OnComplete(() => BossRandomMove());
+        float rangeHeight = Random.Range(Screen.height-120, Screen.height);
+        //transform.DOMove(Camera.main.ScreenToWorldPoint(new Vector3(num, Screen.height, 100)), 2f).OnComplete(() => BossRandomMove());
+        transform.DOMove(Camera.main.ScreenToWorldPoint(new Vector3(num, rangeHeight, 100)), 2f).OnComplete(() => BossRandomMove());
     }
 
     /// <summary>
