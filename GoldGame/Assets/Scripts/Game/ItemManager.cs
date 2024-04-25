@@ -59,7 +59,7 @@ public class ItemManager : Singleton<ItemManager>
     }
 
     /// <summary>
-    /// 生成基础物品 金币、盗贼、炸弹
+    /// 生成基础物品 金币、盗贼、炸弹///后面这个炸弹改成陨石 不掉血 但是 会眩晕主角 或者减速主角？
     /// </summary>
     void CreateBaseItem()
     {
@@ -70,12 +70,12 @@ public class ItemManager : Singleton<ItemManager>
             //float random = Random.Range(0, 1.1f);
             float random = Random.value;
             int prefabIndex;
-            if (random >= 0.5f)
+            if (random >= 0.3f)
                 prefabIndex = 0;
-            else if (random >= 0.2f)
+            else /*if (random >= 0.3f)*/
                 prefabIndex = 1;
-            else
-                prefabIndex = 2;
+            //else
+            //    prefabIndex = 2;  
 
             GameObject prefab = PoolManager.Instance.GetObj(ItemPrefabs[prefabIndex]);
             prefab.transform.position = RandomCreatPos();

@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    [Header("½µÂäËÙ¶È")]
+    [Header("é™è½é€Ÿåº¦")]
     [SerializeField] float fallSpeed = 2;
-    [Header("ÎïÆ·ÀàĞÍ")]
+    [Header("ç‰©å“ç±»å‹")]
     [SerializeField] ItemType ItemType = ItemType.AddMoney;
-    [Tooltip("¸ÕÌå2d")] Rigidbody2D rb;
-    [Tooltip("2dÅö×²Ìå")] Collider2D collider;
-    [Header("×Óµ¯¾«ÁéÍ¼")] public Sprite[] bulletSprites;
-    [Header("×Óµ¯Icon")] public SpriteRenderer bulletIcons;
-    [Header("Éú³ÉºóĞøÎïÆ·")]
+    [Tooltip("åˆšä½“2d")] Rigidbody2D rb;
+    [Tooltip("2dç¢°æ’ä½“")] Collider2D collider;
+    [Header("å­å¼¹ç²¾çµå›¾")] public Sprite[] bulletSprites;
+    [Header("å­å¼¹Icon")] public SpriteRenderer bulletIcons;
+    [Header("ç”Ÿæˆåç»­ç‰©å“")]
     [SerializeField] GameObject prefab;
 
     private void Awake()
@@ -40,13 +40,21 @@ public class Bullet : MonoBehaviour
         GameManager.BossDead -= ReleaseObj;
     }
 
+    private void Update()
+    {
+        if (gameObject.activeInHierarchy)
+        {
+            transform.GetChild(0).Rotate(Vector3.back * 120f * Time.deltaTime);
+        }
+    }
+
     private void FixedUpdate()
     {
         BulletFlying();
     }
 
     /// <summary>
-    /// ½µÂä
+    /// é™è½
     /// </summary>
     private void BulletFlying()
     {

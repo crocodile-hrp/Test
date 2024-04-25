@@ -9,14 +9,18 @@ public class Enemy : MonoBehaviour
     public float maxHp = 100;
     public float currentHp;
     public SpriteRenderer hitMask;
+    [Header("boss攻击CD")] public float atkCd = 2;//随机？
     public Image bossHp;
     [Header("boss精灵")] public SpriteRenderer BossSprite;
     [Header("boss受伤精灵")] public SpriteRenderer BossHitSprite;
     [Header("boss精灵图片数组")]public Sprite[] bossIcons;
+    [Header("boss攻击子弹预制体")] public GameObject[] bulletPrefabs;
+    [Tooltip("是否正在攻击")]private bool isAtking;
+    [Tooltip("随机生成子弹数")] private int randomBulletCount;
     /// <summary>
     /// Boss初始移动距离
     /// </summary>
-    public float initRange = 15f;
+    [Header("Boss初始移动距离")] public float initRange = 15f;
     /// <summary>
     /// Boss到达移速最大所需击杀点数
     /// </summary>
@@ -36,6 +40,11 @@ public class Enemy : MonoBehaviour
         BossInitMove();
     }
 
+    private void Update()
+    {
+        BossAtk();
+    }
+
     private void FixedUpdate()
     {
         BossSkillRelease();
@@ -43,7 +52,9 @@ public class Enemy : MonoBehaviour
 
     void InitBoss()
     {
-        if(GameManager.Instance.killBossCount<=3)
+        atkCd = Random.Range(0.5f, 2.5f);//初始化攻击cd
+        isAtking = false;
+        if (GameManager.Instance.killBossCount<=3)
             maxHp = Random.Range(15, 20);
         else if(GameManager.Instance.killBossCount <= 10)
             maxHp = Random.Range(25, 50);
@@ -144,6 +155,45 @@ public class Enemy : MonoBehaviour
                     break;
             }
         }
+    }
+
+    void BossAtk()
+    {
+        if (!isAtking)
+        {
+            atkCd -= Time.deltaTime;
+            if (atkCd <= 0)
+            {
+                atkCd = Random.Range(0.5f, 5f);
+                isAtking = true;
+                if(GameManager.Instance.killBossCount<=3)
+                    randomBulletCount = Random.Range(1, 6);
+                else
+                    randomBulletCount = Random.Range(2, 16);
+                StartCoroutine(IBossAtk(randomBulletCount));
+            }
+        }   
+    }
+
+    /// <summary>
+    /// boss攻击携程
+    /// </summary>
+    /// <param name="bulletCount">子弹数</param>
+    /// <returns></returns>
+    IEnumerator IBossAtk(int bulletCount)
+    {
+        while(bulletCount > 0)
+        {
+            bulletCount -= 1;
+            transform.DOScale(2.3f, 0.1f);
+            yield return new WaitForSeconds(0.1f);
+            GameObject bullet = PoolManager.Instance.GetObj(bulletPrefabs[0]);
+            bullet.transform.position = transform.position+Vector3.down;
+            transform.DOScale(2f, 0.1f);
+            yield return new WaitForSeconds(Random.Range(0.1f,0.5f));
+        }
+        isAtking = false;
+        yield break;
     }
 
     /// <summary>

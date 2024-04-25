@@ -97,16 +97,8 @@ MonoBehaviour:
   fallSpeed: 2
   ItemType: 0
   bulletSprites:
-  - {fileID: -683203230, guid: 666d546fe842ec64e873791c1d925e13, type: 3}
-  - {fileID: 1884609732, guid: 666d546fe842ec64e873791c1d925e13, type: 3}
-  - {fileID: 1764021695, guid: 666d546fe842ec64e873791c1d925e13, type: 3}
-  - {fileID: 2070537219, guid: 666d546fe842ec64e873791c1d925e13, type: 3}
-  - {fileID: 1995493746, guid: 666d546fe842ec64e873791c1d925e13, type: 3}
+  - {fileID: 930990436, guid: 666d546fe842ec64e873791c1d925e13, type: 3}
   - {fileID: 245505609, guid: 666d546fe842ec64e873791c1d925e13, type: 3}
-  - {fileID: 1442811365, guid: 666d546fe842ec64e873791c1d925e13, type: 3}
-  - {fileID: 1319806334, guid: 666d546fe842ec64e873791c1d925e13, type: 3}
-  - {fileID: 230074215, guid: 666d546fe842ec64e873791c1d925e13, type: 3}
-  - {fileID: -839411719, guid: 666d546fe842ec64e873791c1d925e13, type: 3}
   bulletIcons: {fileID: 927418092099294010}
   prefab: {fileID: 0}
 --- !u!1 &7329342981244709287
@@ -133,14 +125,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7329342981244709287}
-  m_LocalRotation: {x: 0, y: 0, z: -0.38268343, w: 0.92387956}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -3.7957687}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3859038376747595765}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -45}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &927418092099294010
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -182,7 +174,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 5
-  m_Sprite: {fileID: 1764021695, guid: 666d546fe842ec64e873791c1d925e13, type: 3}
+  m_Sprite: {fileID: 245505609, guid: 666d546fe842ec64e873791c1d925e13, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
