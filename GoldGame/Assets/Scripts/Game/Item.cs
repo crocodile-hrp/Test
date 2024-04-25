@@ -126,7 +126,20 @@ public class Item : MonoBehaviour
     /// </summary>
     private void ItemFalling()
     {
-        rb.velocity = new Vector2(0, fallSpeed);
+        //判断是否释放时停技能
+        if (!ItemManager.Instance.isPause)
+        {
+            rb.velocity = new Vector2(0, fallSpeed);
+        }
+        else
+        {
+            rb.velocity = new Vector2(0, 0);
+            //若是金币就不消失
+            if (ItemType != ItemType.AddMoney)
+            {
+                PoolManager.Instance.ReleaseObj(gameObject);
+            }
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

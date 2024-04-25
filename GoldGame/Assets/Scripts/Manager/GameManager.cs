@@ -125,5 +125,4 @@ public class GameManager : Singleton<GameManager>
         bossObj.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height - 150, 100));
         //bossObj.transform.DOMove(Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height + 50, 100)), 2f);
     }
-
 }

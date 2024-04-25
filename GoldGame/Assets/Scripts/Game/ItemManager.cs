@@ -45,6 +45,12 @@ public class ItemManager : Singleton<ItemManager>
         if (GameManager.Instance.isGameOver || GameManager.Instance.bossIsDead)
             return;
         createPrefab();
+
+        //测试技能
+        //if (Input.GetKeyDown(KeyCode.L))
+        //{
+        //    TimePauseSkill();
+        //}
     }
 
     /// <summary>
@@ -136,5 +142,22 @@ public class ItemManager : Singleton<ItemManager>
     {
         int randomX = Random.Range(0, Screen.width);
         return Camera.main.ScreenToWorldPoint(new Vector3(randomX, Screen.height, 100));
+    }
+
+    public bool isPause;
+    public float pauseTime = 2f;
+
+    /// <summary>
+    /// 时停技能
+    /// </summary>
+    public void TimePauseSkill()
+    {
+        isPause = true;
+        Invoke("PauseSkillEnd", pauseTime);
+    }
+
+    void PauseSkillEnd()
+    {
+        isPause = false;
     }
 }
