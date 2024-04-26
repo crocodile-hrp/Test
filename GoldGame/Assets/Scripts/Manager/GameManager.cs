@@ -22,6 +22,7 @@ public class GameManager : Singleton<GameManager>
     public bool bossIsDead;
     [Tooltip("是否为第一只生成的boss")]public bool isFirstBoss = true;//是否为第一只生成的boss
     public float firstInitBossTime = 20f;
+    [Tooltip("子弹飞行速度倍率")]public int bulletFlySpeed = 1;
 
     protected override void Awake()
     {
@@ -72,7 +73,8 @@ public class GameManager : Singleton<GameManager>
         life = maxlife;
         money = 0;
         moneyRatio = 1;
-        player.shieldTime = 4;
+        bulletFlySpeed = 1;
+        player.itemDelayTime = 4;
         player.atk = 1;
         player.atkCd = 2;
         gameTime = 0;
@@ -112,6 +114,8 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    public GameObject bossObj;
+
     /// <summary>
     /// 基础生成boss逻辑
     /// </summary>
@@ -120,9 +124,9 @@ public class GameManager : Singleton<GameManager>
         bossIsDead = false;
         isFirstBoss = false;
         UIManager.Instance.bossHpHold.SetActive(true);
-        GameObject bossObj = PoolManager.Instance.GetObj(bossPrefab);
+        bossObj = PoolManager.Instance.GetObj(bossPrefab);
         //boss出场小位移
-        bossObj.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height - 150, 100));
+        bossObj.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height /*- 150*/, 100));
         //bossObj.transform.DOMove(Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height + 50, 100)), 2f);
     }
 }

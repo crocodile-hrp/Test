@@ -7,6 +7,7 @@ public class ItemManager : Singleton<ItemManager>
     [Tooltip("创建基本道具间隔")] public float createTime = 0;
     [Tooltip("创建生命道具间隔")]public float createLifeItemTime = 5;
     [Tooltip("创建护盾道具间隔")] public float createShieldTime = 20;
+    [Tooltip("Atk道具间隔")] public float createAtkTime = 30;
 
     /// <summary>
     /// 最大时间间隔
@@ -27,7 +28,11 @@ public class ItemManager : Singleton<ItemManager>
 
     public GameObject[] ItemPrefabs;
     [Tooltip("护盾道具")] public GameObject shieldItem;
+    [Tooltip("ATK道具")] public GameObject atkItem;
     [Header("冲过来的敌人")] public GameObject atkEnemy;//待做
+
+    [Header("是否在时停")]public bool isPause;
+    [Header("时停持续时间")] public float pauseTime = 2f;
     public bool islandScape;
     protected override void Awake()
     {
@@ -44,13 +49,15 @@ public class ItemManager : Singleton<ItemManager>
     {
         if (GameManager.Instance.isGameOver || GameManager.Instance.bossIsDead)
             return;
-        createPrefab();
+
+        if(!isPause)
+            createPrefab();
 
         //测试技能
-        //if (Input.GetKeyDown(KeyCode.L))
-        //{
-        //    TimePauseSkill();
-        //}
+        if (Input.GetKeyDown(KeyCode.L) || (GameManager.Instance.hitBossCount%9==0 && GameManager.Instance.hitBossCount>0))
+        {
+            TimePauseSkill();
+        }
     }
 
     /// <summary>
@@ -60,7 +67,7 @@ public class ItemManager : Singleton<ItemManager>
     {
         CreateBaseItem();
         CreateAddLiftPrefab();
-        CreateShieldItem();
+        CreateBuffItem();
 
     }
 
@@ -122,11 +129,12 @@ public class ItemManager : Singleton<ItemManager>
     }
 
     /// <summary>
-    /// 生成护盾道具 （后期各种道具可以一起套用 到时间生成随机一个道具？）
+    /// 生成Buff道具 （后期各种道具可以一起套用 到时间生成随机一个道具？）
     /// </summary>
-    void CreateShieldItem()
+    void CreateBuffItem()
     {
         createShieldTime -= Time.deltaTime;
+        createAtkTime -= Time.deltaTime;
         if (createShieldTime <= 0)
         {
             GameObject prefab = PoolManager.Instance.GetObj(shieldItem);
@@ -136,6 +144,18 @@ public class ItemManager : Singleton<ItemManager>
             else
                 createShieldTime = Random.Range(10, 20f);
         }
+
+        if(createAtkTime <= 0)
+        {
+            GameObject prefab = PoolManager.Instance.GetObj(atkItem);
+            prefab.transform.position = RandomCreatPos();
+            if (GameManager.Instance.gameTime <= 60f)
+                createAtkTime = Random.Range(15, 30f);
+            else
+                createAtkTime = Random.Range(5, 30f);
+        }
+
+
     }
 
     public Vector3 RandomCreatPos()
@@ -144,8 +164,7 @@ public class ItemManager : Singleton<ItemManager>
         return Camera.main.ScreenToWorldPoint(new Vector3(randomX, Screen.height, 100));
     }
 
-    public bool isPause;
-    public float pauseTime = 2f;
+
 
     /// <summary>
     /// 时停技能
@@ -159,5 +178,16 @@ public class ItemManager : Singleton<ItemManager>
     void PauseSkillEnd()
     {
         isPause = false;
+    }
+
+    /// <summary>
+    /// 反击子弹
+    /// </summary>
+    /// <param name="go"></param>
+    public void BeatBack(GameObject boom ,GameObject boss)
+    {
+        Vector2 dir = (Vector2)boss.transform.position - (Vector2)boom.transform.position;
+        boom.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+        boom.GetComponent<Rigidbody2D>().AddForce(dir.normalized * (-boom.GetComponent<Item>().fallSpeed * 2), ForceMode2D.Impulse);
     }
 }

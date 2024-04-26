@@ -42,7 +42,8 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        BossAtk();
+        if(!ItemManager.Instance.isPause)
+            BossAtk();
     }
 
     private void FixedUpdate()
@@ -187,8 +188,10 @@ public class Enemy : MonoBehaviour
             bulletCount -= 1;
             transform.DOScale(2.3f, 0.1f);
             yield return new WaitForSeconds(0.1f);
-            GameObject bullet = PoolManager.Instance.GetObj(bulletPrefabs[0]);
-            bullet.transform.position = transform.position+Vector3.down;
+            int num = Random.Range(0, 2);
+            GameObject bullet = PoolManager.Instance.GetObj(bulletPrefabs[num]);
+            bullet.transform.position = transform.position + Vector3.down;
+            //bullet.transform.position = transform.position + new Vector3(0, -15, 0);
             transform.DOScale(2f, 0.1f);
             yield return new WaitForSeconds(Random.Range(0.1f,0.5f));
         }

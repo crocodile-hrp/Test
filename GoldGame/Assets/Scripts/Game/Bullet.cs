@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    [Header("降落速度")]
-    [SerializeField] float fallSpeed = 2;
+    [Header("基础飞行速度")]
+    [SerializeField] float baseSpeed = 2;
+    [Tooltip("当前飞行速度")]
+    [SerializeField] float currentFlySpeed = 2;
     [Header("物品类型")]
     [SerializeField] ItemType ItemType = ItemType.AddMoney;
     [Tooltip("刚体2d")] Rigidbody2D rb;
@@ -23,7 +25,8 @@ public class Bullet : MonoBehaviour
 
     private void OnEnable()
     {
-        bulletIcons.sprite = bulletSprites[GameManager.Instance.player.atk - 1];
+        //bulletIcons.sprite = bulletSprites[GameManager.Instance.player.atk - 1];
+        currentFlySpeed = baseSpeed * GameManager.Instance.bulletFlySpeed;
         GameManager.GameOver += ReleaseObj;
         GameManager.BossDead += ReleaseObj;
     }
@@ -58,7 +61,7 @@ public class Bullet : MonoBehaviour
     /// </summary>
     private void BulletFlying()
     {
-        rb.velocity = new Vector2(0, fallSpeed);
+        rb.velocity = new Vector2(0, currentFlySpeed);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

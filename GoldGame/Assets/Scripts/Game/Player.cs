@@ -31,8 +31,9 @@ public class Player : MonoBehaviour
     [Tooltip("移动方向")] int moveDir = 0;
     [Tooltip("刚体2d")] Rigidbody2D rb;
     [Tooltip("2d碰撞体")] Collider2D collider;
-    [Tooltip("是否落地")] [SerializeField] bool isOnLand;
-    [Tooltip("护盾时间")]public float shieldTime = 4;
+    [Tooltip("是否落地")] [SerializeField] public bool isOnLand;
+    [Tooltip("道具时间")]public float itemDelayTime = 4;
+    [Tooltip("Atk时间")] public float atkTime = 4;
     [Tooltip("护盾状态")] public bool isShield;
 
 
@@ -80,7 +81,26 @@ public class Player : MonoBehaviour
     /// </summary>
     public void ShieldState()
     {
-        StartCoroutine(IEShieldTimeDaley(shieldTime));
+        StartCoroutine(IEShieldTimeDaley(itemDelayTime));
+    }
+
+    /// <summary>
+    /// Atk状态 (暂定名)
+    /// </summary>
+    public void AtkState()
+    {
+        StartCoroutine(IEAtkTimeDaley(itemDelayTime));
+    }
+
+    IEnumerator IEAtkTimeDaley(float timer)
+    {
+        float startCd = atkCd;
+        currentAtkCd = 0;
+        atkCd = startCd * 0.5f;
+        GameManager.Instance.bulletFlySpeed = 2;
+        yield return new WaitForSeconds(timer);
+        GameManager.Instance.bulletFlySpeed = 1;
+        atkCd = startCd;
     }
 
     /// <summary>

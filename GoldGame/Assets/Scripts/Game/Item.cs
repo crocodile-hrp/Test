@@ -8,12 +8,14 @@ public enum ItemType
     ReduceMoney,
     AddLift,
     Bomb,
+    BombBeat,
     Shield,
+    Atk,
 }
 public class Item : MonoBehaviour
 {
     [Header("降落速度")]
-    [SerializeField] float fallSpeed = -2;
+    [SerializeField] public float fallSpeed = -2;
     [Header("物品类型")]
     [SerializeField] ItemType ItemType = ItemType.AddMoney;
     [Tooltip("刚体2d")] Rigidbody2D rb;
@@ -27,6 +29,9 @@ public class Item : MonoBehaviour
     [Header("最大速度")] public float maxSpeed = 6f;
     [Header("最小速度")] public float minSpeed = 1.2f;
     [Header("随机范围")] public float randomRange = 1f;
+    [Header("是否为debuff道具")] public bool isDebuff;
+
+    bool isfirstHit = false;
 
     private void Awake()
     {
@@ -81,6 +86,10 @@ public class Item : MonoBehaviour
         //else
         //    fallSpeed = Random.Range(-6, -1.2f);
 
+        //反击炸弹相关回到初始状态
+        isfirstHit = false;
+        beatBack = false;
+
         if (GameManager.Instance == null) return;
         //新
         if (GameManager.Instance.killBossCount >= 2)//两只boss后发力
@@ -116,9 +125,27 @@ public class Item : MonoBehaviour
         GameManager.BossDead -= ReleaseObj;
     }
 
+    bool beatBack = false;
+
     private void FixedUpdate()
     {
-        ItemFalling();
+        if (!beatBack)
+        {
+            ItemFalling();
+        }
+
+        if(ItemType == ItemType.BombBeat)
+        {
+            if (gameObject.activeInHierarchy)
+            {
+                //小旋转
+                transform.Rotate(Vector3.forward * 180 * Time.deltaTime);
+                if (beatBack)
+                {
+                    ItemManager.Instance.BeatBack(gameObject, GameManager.Instance.bossObj);
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -134,12 +161,14 @@ public class Item : MonoBehaviour
         else
         {
             rb.velocity = new Vector2(0, 0);
-            //若是金币就不消失
-            if (ItemType != ItemType.AddMoney)
+            //新 若是debuff物品 直接清除
+            if (isDebuff)
             {
                 PoolManager.Instance.ReleaseObj(gameObject);
             }
         }
+
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -148,21 +177,24 @@ public class Item : MonoBehaviour
         {
             PoolManager.Instance.ReleaseObj(gameObject);
         }
-        //if (collision.CompareTag("Shield"))
-        //{
-        //    switch (ItemType)
-        //    {
-        //        case ItemType.AddMoney:
-        //            GameManager.Instance.SetMoney(10);
-        //            break;
-        //        case ItemType.Shield:
-        //            FindObjectOfType<Player>().ShieldState();
-        //            break;
-        //    }
-
-        //    PoolManager.Instance.ReleaseObj(gameObject);
-        //    return;
-        //}
+        //反击判断
+        if (ItemType == ItemType.BombBeat)
+        {
+            if (collision.CompareTag("Boss"))
+            {
+                //炸弹初次生成似乎在boss体内 加此判断避免boss自杀
+                if (!isfirstHit)
+                {
+                    isfirstHit = true;
+                }
+                else
+                {
+                    collision.GetComponent<Enemy>().OnHit(GameManager.Instance.player.atk);
+                    PoolManager.Instance.GetObj(prefab).transform.position = gameObject.transform.position;
+                    PoolManager.Instance.ReleaseObj(gameObject);
+                }
+            }
+        }
         if (collision.CompareTag("Player"))
         {
             switch (ItemType) 
@@ -186,15 +218,33 @@ public class Item : MonoBehaviour
                         PoolManager.Instance.GetObj(prefab).transform.position = gameObject.transform.position;
                     }
                     break;
+                case ItemType.BombBeat:
+                    if (!GameManager.Instance.player.isShield)//非护盾下
+                    {
+                        //若在跳跃状态 则炸弹返回炸boss
+                        if (!GameManager.Instance.player.isOnLand)
+                        {
+                            beatBack = true;
+                        }
+                        else
+                        {
+                            GameManager.Instance.SetLift(-1);
+                            PoolManager.Instance.GetObj(prefab).transform.position = gameObject.transform.position;
+                        }
+                    }
+                    break;
                 case ItemType.AddLift:
                     GameManager.Instance.SetLift(1);
                     break;
                 case ItemType.Shield:
                     collision.GetComponent<Player>().ShieldState();
                     break;
+                case ItemType.Atk:
+                    collision.GetComponent<Player>().AtkState();
+                    break;
             }
-
-            PoolManager.Instance.ReleaseObj(gameObject);
+            if(ItemType!=ItemType.BombBeat)
+                PoolManager.Instance.ReleaseObj(gameObject);
         }
     }
 

@@ -153,3 +153,4 @@ MonoBehaviour:
   maxSpeed: 6
   minSpeed: 1.2
   randomRange: 1
+  isDebuff: 1

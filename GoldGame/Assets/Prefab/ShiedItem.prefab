@@ -95,8 +95,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fallSpeed: -6
-  ItemType: 4
+  ItemType: 5
   prefab: {fileID: 0}
+  minToMaxTime: 30
+  maxSpeed: 6
+  minSpeed: 1.2
+  randomRange: 1
+  isDebuff: 0
 --- !u!1 &4865928418937337596
 GameObject:
   m_ObjectHideFlags: 0
@@ -170,8 +175,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 1922574300, guid: 666d546fe842ec64e873791c1d925e13, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 13482f66eae11d14995fbdf2e845e9ae, type: 3}
+  m_Color: {r: 0, g: 0.9118314, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

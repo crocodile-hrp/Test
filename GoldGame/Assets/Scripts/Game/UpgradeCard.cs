@@ -43,19 +43,19 @@ public class UpgradeCard : MonoBehaviour
         {
             case 0:
                 cardType = CardType.Life;
-                Info.text = "生命上限+1(有封顶)";
+                Info.text = "生命上限+1";
                 break;
             case 1:
                 cardType = CardType.Atk;
-                Info.text = "攻击力上升1(有封顶)";
+                Info.text = "攻击力上升1";
                 break;
             case 2:
                 cardType = CardType.AtkCd;
-                Info.text = "攻击间隔减少百分之十(有封顶)";
+                Info.text = "攻击间隔减少百分之十";
                 break;
             case 3:
                 cardType = CardType.Move;
-                Info.text = "移动速度增加百分之十(有封顶)";
+                Info.text = "移动速度增加百分之十";
                 break;
             case 4:
                 cardType = CardType.Money;
@@ -63,7 +63,7 @@ public class UpgradeCard : MonoBehaviour
                 break;
             case 5:
                 cardType = CardType.ShieldTime;
-                Info.text = "护盾时间+1";
+                Info.text = "道具时间+1";
                 break;
         }
         costText.text = (10 * flushCount) + "金币刷新词条";
@@ -96,8 +96,8 @@ public class UpgradeCard : MonoBehaviour
                 GameManager.Instance.moneyRatio += 1;
                     break;
             case CardType.ShieldTime:
-                if (GameManager.Instance.player.shieldTime < 12)
-                    GameManager.Instance.player.shieldTime += 1;
+                if (GameManager.Instance.player.itemDelayTime < 12)
+                    GameManager.Instance.player.itemDelayTime += 1;
                 break;
         }
         //GameManager.Instance.life = GameManager.Instance.maxlife;
